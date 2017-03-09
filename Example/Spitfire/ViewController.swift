@@ -21,6 +21,8 @@ class ViewController: UIViewController {
             images.append(image)
         }
         
+        Spitfire.shared.makeVideo(with: <#T##[UIImage]#>, fps: <#T##Int32#>, progress: <#T##((Progress) -> Void)##((Progress) -> Void)##(Progress) -> Void#>, success: <#T##((URL) -> Void)##((URL) -> Void)##(URL) -> Void#>, failure: <#T##((Error) -> Void)##((Error) -> Void)##(Error) -> Void#>)
+        
         Spitfire.shared.makeVideo(with: images, progress: { (progress) in
             let percent = (progress.fractionCompleted * 100).roundTo(places: 2)
             print("\(percent)%")

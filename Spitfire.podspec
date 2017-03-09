@@ -9,7 +9,6 @@ Pod::Spec.new do |s|
 
   s.homepage         = 'https://github.com/seanmcneil/Spitfire'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'seanmcneil' => 's@m.com' }
   s.source           = { :git => 'https://github.com/seanmcneil/Spitfire.git', :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/sean_mcneil'
 
