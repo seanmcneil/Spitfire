@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'Spitfire_Example' do
+  pod 'Spitfire', :path => '../'
+
+  target 'Spitfire_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
