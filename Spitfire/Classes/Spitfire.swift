@@ -108,7 +108,6 @@ public class Spitfire {
                     if videoWriterInput.isReadyForMoreMediaData {
                         let lastFrameTime = CMTimeMake(frameCount, fps)
                         let presentationTime = frameCount == 0 ? lastFrameTime : CMTimeAdd(lastFrameTime, frameDuration)
-                        
                         let appendImage = images[Int(frameCount)]
                         
                         guard appendImage.size == size else {
@@ -117,7 +116,7 @@ public class Spitfire {
                             return
                         }
 
-                        self?.appendPixelBuffer(for: images[Int(frameCount)], pixelBufferAdaptor: pixelBufferAdaptor, presentationTime: presentationTime, success: {
+                        self?.appendPixelBuffer(for: appendImage, pixelBufferAdaptor: pixelBufferAdaptor, presentationTime: presentationTime, success: {
                             frameCount += 1
                             currentProgress.completedUnitCount = frameCount
                             progress(currentProgress)
