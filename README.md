@@ -14,6 +14,28 @@ Spitfire is a simple utility for taking an array of images and creating a video 
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
+The following code can be found in the example project, but demonstrates how to call it and handle the various callbacks it supports:
+
+```swift
+Spitfire.shared.makeVideo(with: images, progress: { (progress) in
+    let percent = (progress.fractionCompleted * 100).roundTo(places: 2)
+    print("\(percent)%")
+}, success: { (url) in
+    PHPhotoLibrary.shared().performChanges({
+    PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)
+}) { saved, error in
+    if saved {
+        let alertController = UIAlertController(title: NSLocalizedString("Your video was saved", comment: ""), message: nil, preferredStyle: .alert)
+        let defaultAction = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil)
+        alertController.addAction(defaultAction)
+        self.present(alertController, animated: true, completion: nil)
+        }
+    }
+}) { (error) in
+    print(error.localizedDescription)
+}
+```
+
 ## Requirements
 - iOS 8.3+
 - Xcode 8.0+
