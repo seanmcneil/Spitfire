@@ -41,6 +41,8 @@ public class Spitfire {
             return
         }
         
+        //let size = CGSize(width: imageSize.width * UIScreen.main.scale, height: imageSize.height * UIScreen.main.scale)
+        
         guard fps > 0 && fps <= 60 else {
             let message = NSLocalizedString("Framerate must be between 1 and 60", comment: "")
             failure(SpitfireError.InvalidFramerate(message))
