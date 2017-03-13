@@ -21,11 +21,9 @@ public enum SpitfireError: Error {
 }
 
 public class Spitfire {
-    static public let shared = Spitfire()
+    public init() { }
     
-    private init() { }
-    
-    var videoWriter: AVAssetWriter?
+    private var videoWriter: AVAssetWriter?
     
     private var outputURL: URL {
         let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
@@ -34,14 +32,20 @@ public class Spitfire {
         return documentURL.appendingPathComponent("output.mov")
     }
     
-    public func makeVideo(with images: [UIImage], fps: Int32 = 30, progress: @escaping ((Progress) -> Void), success: @escaping ((URL) -> Void), failure: @escaping ((Error) -> Void)) {
+    /// Produces a video based on the contents of a UIImage array
+    ///
+    /// - Parameters:
+    ///   - images: Images to use for creating video. Should all have the same dimensions
+    ///   - fps: Frames per second, with a default value of 30
+    ///   - progress: Handler that will return a fractional value indicating percent complete
+    ///   - success: Handler that will return a URL of the completed video if successful
+    ///   - failure: Handler that will return an error message if one occurs
+    public func makeVideo(with images: [UIImage], fps: Int32 = 30, progress: @escaping ((Progress) -> ()), success: @escaping ((URL) -> ()), failure: @escaping ((Error) -> ())) {
         guard let size = images.first?.size else {
             failure(SpitfireError.ImageArrayEmpty)
             
             return
         }
-        
-        //let size = CGSize(width: imageSize.width * UIScreen.main.scale, height: imageSize.height * UIScreen.main.scale)
         
         guard fps > 0 && fps <= 60 else {
             let message = NSLocalizedString("Framerate must be between 1 and 60", comment: "")

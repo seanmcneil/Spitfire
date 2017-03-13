@@ -17,22 +17,13 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 The following code can be found in the example project, but demonstrates how to call it and handle the various callbacks it supports:
 
 ```swift
-Spitfire.shared.makeVideo(with: images, progress: { (progress) in
-    let percent = (progress.fractionCompleted * 100).roundTo(places: 2)
-    print("\(percent)%")
+let spitfire = Spitfire()
+spitfire.makeVideo(with: images, progress: { (progress) in
+    // Update progress
 }, success: { (url) in
-    PHPhotoLibrary.shared().performChanges({
-    PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)
-}) { saved, error in
-    if saved {
-        let alertController = UIAlertController(title: NSLocalizedString("Your video was saved", comment: ""), message: nil, preferredStyle: .alert)
-        let defaultAction = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil)
-        alertController.addAction(defaultAction)
-        self.present(alertController, animated: true, completion: nil)
-        }
-    }
+    // Handle completed video
 }) { (error) in
-    print(error.localizedDescription)
+    // Handle error
 }
 ```
 
@@ -54,15 +45,32 @@ pod "Spitfire"
 
 ```swift
 import Spitfire
+```
 
-Spitfire.shared.makeVideo(with: <#T##[UIImage]#>, progress: <#T##((Progress) -> Void)##((Progress) -> Void)##(Progress) -> Void#>, success: <#T##((URL) -> Void)##((URL) -> Void)##(URL) -> Void#>, failure: <#T##((Error) -> Void)##((Error) -> Void)##(Error) -> Void#>)
-``` 
-
-The default makeVideo method will apply a framerate of 30 fps. Optionally, you can specify one between 1 - 60 fps:
+Call the default makeVideo function, which uses a value of 30 for frame rate:
 
 ```swift
-Spitfire.shared.makeVideo(with: <#T##[UIImage]#>, fps: <#T##Int32#>, progress: <#T##((Progress) -> Void)##((Progress) -> Void)##(Progress) -> Void#>, success: <#T##((URL) -> Void)##((URL) -> Void)##(URL) -> Void#>, failure: <#T##((Error) -> Void)##((Error) -> Void)##(Error) -> Void#>)
-```
+let spitfire = Spitfire()
+spitfire.makeVideo(with: images, progress: { (progress) in
+    // Update progress
+}, success: { (url) in
+    // Handle completed video
+}) { (error) in
+    // Handle error
+}
+``` 
+
+Call the optional makeVideo function and specify a frame rate between 1 and 60:
+
+```swift
+let spitfire = Spitfire()
+spitfire.makeVideo(with: images, fps: 5, progress: { (progress) in
+    // Update progress
+}, success: { (url) in
+    // Handle completed video
+}) { (error) in
+    // Handle error
+}```
 
 ## Errors
 
@@ -70,14 +78,14 @@ Spitfire provides a relatively rich set of errors via an enum that should addres
 
 ```swift
 public enum SpitfireError: Error {
-case ImageArrayEmpty
-case InvalidFramerate(String)
-case ImageDimensionsMatchFailure
-case ImageDimensionsMultiplierFailure(String)
-case VideoWriterFailure
-case PixelBufferPointeeFailure
-case InvalidStatusCode(Int)
-case PixelBufferApendFailure
+    case ImageArrayEmpty
+    case InvalidFramerate(String)
+    case ImageDimensionsMatchFailure
+    case ImageDimensionsMultiplierFailure(String)
+    case VideoWriterFailure
+    case PixelBufferPointeeFailure
+    case InvalidStatusCode(Int)
+    case PixelBufferApendFailure
 }
 ```
 
