@@ -70,7 +70,8 @@ spitfire.makeVideo(with: images, fps: 5, progress: { (progress) in
     // Handle completed video
 }) { (error) in
     // Handle error
-}```
+}
+```
 
 ## Errors
 
