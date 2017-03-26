@@ -1,10 +1,12 @@
-## 0.3.0 Beta (2017-03-12)
+## 1.0.0 Release (2017-03-26)
 
 ##### Enhancements
 
-## 0.3.0 Beta
-* The write function is no longer static
+## 1.0.0 Beta
+* Initial release
 
-* Documentation added to write function 
+* Betea versions retired
+
+* Design now relies on a try / catch block to handle errors versus a failure block
 
 * Improved readme
