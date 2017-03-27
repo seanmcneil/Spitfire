@@ -87,19 +87,20 @@ public class Spitfire {
                 var frameCount: Int64 = 0
                 
                 while(Int(frameCount) < images.count) {
+                    // Will continue to loop until the video writer is able to write, which effectively handles buffer backups
                     if videoWriterInput.isReadyForMoreMediaData {
                         let lastFrameTime = CMTimeMake(frameCount, fps)
                         let presentationTime = frameCount == 0 ? lastFrameTime : CMTimeAdd(lastFrameTime, frameDuration)
-                        let appendImage = images[Int(frameCount)]
+                        let image = images[Int(frameCount)]
                         
                         do {
-                            guard appendImage.size == size else {
+                            guard image.size == size else {
                                 throw(SpitfireError.ImageDimensionsMatchFailure)
                             }
                         } catch { } // Do not throw here
                         
                         do {
-                            try self?.appendPixelBuffer(for: appendImage, pixelBufferAdaptor: pixelBufferAdaptor, presentationTime: presentationTime, success: {
+                            try self?.append(pixelBufferAdaptor: pixelBufferAdaptor, with: image, at: presentationTime, success: { 
                                 frameCount += 1
                                 currentProgress.completedUnitCount = frameCount
                                 progress(currentProgress)

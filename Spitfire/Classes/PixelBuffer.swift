@@ -9,9 +9,10 @@
 import AVFoundation
 
 extension Spitfire {
-    func appendPixelBuffer(for image: UIImage, pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor, presentationTime: CMTime, success: @escaping (() -> Void)) throws {
+    // Set up pixel buffer to add a frame at specified time
+    func append(pixelBufferAdaptor adaptor: AVAssetWriterInputPixelBufferAdaptor, with image: UIImage, at presentationTime: CMTime, success: @escaping (() -> ())) throws {
         do {
-            if let pixelBufferPool = pixelBufferAdaptor.pixelBufferPool {
+            if let pixelBufferPool = adaptor.pixelBufferPool {
                 let pixelBufferPointer = UnsafeMutablePointer<CVPixelBuffer?>.allocate(capacity: 1)
                 let status = CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pixelBufferPool, pixelBufferPointer)
                 guard let pixelBuffer = pixelBufferPointer.pointee else {
@@ -21,8 +22,8 @@ extension Spitfire {
                     throw(SpitfireError.InvalidStatusCode(Int(status)))
                 }
                 
-                fillPixelBufferFromImage(image: image, pixelBuffer: pixelBuffer)
-                if pixelBufferAdaptor.append(pixelBuffer, withPresentationTime: presentationTime) {
+                fill(pixelBuffer: pixelBuffer, with: image)
+                if adaptor.append(pixelBuffer, withPresentationTime: presentationTime) {
                     pixelBufferPointer.deinitialize()
                     pixelBufferPointer.deallocate(capacity: 1)
                     success()
@@ -35,15 +36,16 @@ extension Spitfire {
         }
     }
     
-    private func fillPixelBufferFromImage(image: UIImage, pixelBuffer: CVPixelBuffer) {
-        CVPixelBufferLockBaseAddress(pixelBuffer, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
+    // Populates the pixel buffer with the contents of the current image
+    private func fill(pixelBuffer buffer: CVPixelBuffer, with image: UIImage) {
+        CVPixelBufferLockBaseAddress(buffer, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
         
         guard let context = CGContext(
-            data: CVPixelBufferGetBaseAddress(pixelBuffer),
+            data: CVPixelBufferGetBaseAddress(buffer),
             width: Int(image.size.width),
             height: Int(image.size.height),
             bitsPerComponent: 8,
-            bytesPerRow: CVPixelBufferGetBytesPerRow(pixelBuffer),
+            bytesPerRow: CVPixelBufferGetBytesPerRow(buffer),
             space: CGColorSpaceCreateDeviceRGB(),
             bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue
             ) else { return }
@@ -52,6 +54,6 @@ extension Spitfire {
         let rect = CGRect(origin: .zero, size: image.size)
         context.draw(cgImage, in: rect)
         
-        CVPixelBufferUnlockBaseAddress(pixelBuffer, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
+        CVPixelBufferUnlockBaseAddress(buffer, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
     }
 }
