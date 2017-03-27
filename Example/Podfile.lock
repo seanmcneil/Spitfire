@@ -1,5 +1,5 @@
 PODS:
-  - Spitfire (1.0.0)
+  - Spitfire (1.0.1)
 
 DEPENDENCIES:
   - Spitfire (from `../`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Spitfire: 7919157f2a5eff96b14d215d87f0d3053cd57beb
+  Spitfire: 3d6c21836cdf0d1b636bfe183c391837a2490cd3
 
 PODFILE CHECKSUM: 6e210a8ce055baaa34de17bcc467c251fb78fa8a
 
