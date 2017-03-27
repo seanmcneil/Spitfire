@@ -2,7 +2,7 @@ osx_image: xcode8.2
 language: objective-c
 
 before_install:
-- xcodebuild  -sdk "iphonesimulator" -xcconfig Spitfire.xcconfig -configuration Release clean
+#- xcodebuild  -sdk "iphonesimulator" -xcconfig Spitfire.xcconfig -configuration Release clean
 - rm -rf ~/Library/Developer/Xcode/DerivedData
 - gem install cocoapods # Since Travis is not always on latest version
 - pod install --project-directory=Example
