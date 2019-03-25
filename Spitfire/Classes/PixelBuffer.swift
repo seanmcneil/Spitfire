@@ -24,8 +24,8 @@ extension Spitfire {
                 
                 fill(pixelBuffer: pixelBuffer, with: image)
                 if adaptor.append(pixelBuffer, withPresentationTime: presentationTime) {
-                    pixelBufferPointer.deinitialize()
-                    pixelBufferPointer.deallocate(capacity: 1)
+                    pixelBufferPointer.deinitialize(count: 1)
+                    pixelBufferPointer.deallocate()
                     success()
                 } else {
                     throw(SpitfireError.PixelBufferApendFailure)

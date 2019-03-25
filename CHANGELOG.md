@@ -1,6 +1,9 @@
-## 1.0.1 Release (2017-03-26)
+## 1.1.0 Release (2019-03-25)
 
 ##### Enhancements
+
+## 1.1.0 Release
+* Compatibility with Swift 4.0
 
 ## 1.0.1 Release
 * Refactor code related to PixelBuffer class

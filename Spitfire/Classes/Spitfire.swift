@@ -47,7 +47,7 @@ public class Spitfire {
         try? FileManager.default.removeItem(at: outputURL)
         
         do {
-            try videoWriter = AVAssetWriter(outputURL: outputURL, fileType: AVFileTypeQuickTimeMovie)
+            try videoWriter = AVAssetWriter(outputURL: outputURL, fileType: AVFileType.mov)
         } catch let error {
             throw(error)
         }
@@ -57,12 +57,12 @@ public class Spitfire {
         }
         
         let videoSettings: [String : Any] = [
-            AVVideoCodecKey  : AVVideoCodecH264,
+            AVVideoCodecKey  : AVVideoCodecType.h264,
             AVVideoWidthKey  : size.width,
             AVVideoHeightKey : size.height,
-            ]
+        ]
         
-        let videoWriterInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: videoSettings)
+        let videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: videoSettings)
         
         let sourceBufferAttributes: [String : Any] = [
             (kCVPixelBufferPixelFormatTypeKey as String): Int(kCVPixelFormatType_32ARGB),
@@ -78,18 +78,18 @@ public class Spitfire {
         videoWriter.add(videoWriterInput)
         
         if videoWriter.startWriting() {
-            videoWriter.startSession(atSourceTime: kCMTimeZero)
+            videoWriter.startSession(atSourceTime: CMTime.zero)
             assert(pixelBufferAdaptor.pixelBufferPool != nil)
             let writeQueue = DispatchQueue(label: "writeQueue")
             videoWriterInput.requestMediaDataWhenReady(on: writeQueue, using: { [weak self] in
-                let frameDuration = CMTimeMake(1, fps)
+                let frameDuration = CMTimeMake(value: 1, timescale: fps)
                 let currentProgress = Progress(totalUnitCount: Int64(images.count))
                 var frameCount: Int64 = 0
                 
                 while(Int(frameCount) < images.count) {
                     // Will continue to loop until the video writer is able to write, which effectively handles buffer backups
                     if videoWriterInput.isReadyForMoreMediaData {
-                        let lastFrameTime = CMTimeMake(frameCount, fps)
+                        let lastFrameTime = CMTimeMake(value: frameCount, timescale: fps)
                         let presentationTime = frameCount == 0 ? lastFrameTime : CMTimeAdd(lastFrameTime, frameDuration)
                         let image = images[Int(frameCount)]
                         
@@ -100,7 +100,7 @@ public class Spitfire {
                         } catch { } // Do not throw here
                         
                         do {
-                            try self?.append(pixelBufferAdaptor: pixelBufferAdaptor, with: image, at: presentationTime, success: { 
+                            try self?.append(pixelBufferAdaptor: pixelBufferAdaptor, with: image, at: presentationTime, success: {
                                 frameCount += 1
                                 currentProgress.completedUnitCount = frameCount
                                 progress(currentProgress)
