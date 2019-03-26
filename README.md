@@ -55,9 +55,9 @@ func createVideo(for images: [UIImage]) {
 Be aware that the image array to feed the writer can start to get immense, easily exceeding 1GB of RAM
 
 ## Requirements
-- iOS 8.3+
-- Xcode 8.0+
-- Swift 3.0+
+- iOS 11.0+
+- Xcode 9.0+
+- Swift 4.0+
 
 ## Installation
 
