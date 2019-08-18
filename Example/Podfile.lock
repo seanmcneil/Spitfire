@@ -1,0 +1,16 @@
+PODS:
+  - Spitfire (2.0)
+
+DEPENDENCIES:
+  - Spitfire (from `../`)
+
+EXTERNAL SOURCES:
+  Spitfire:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Spitfire: a3a8e7dcbb71441ef25069066c13ec1fffd58d41
+
+PODFILE CHECKSUM: c4e95afeea11d23bde264df03775c791ac5f5fa2
+
+COCOAPODS: 1.7.5

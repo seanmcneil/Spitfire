@@ -1,0 +1,12 @@
+use_frameworks!
+platform :ios, '11.0'
+
+target 'Spitfire_Example' do
+  pod 'Spitfire', :path => '../'
+
+  target 'Spitfire_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
