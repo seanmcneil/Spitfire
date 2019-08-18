@@ -15,11 +15,7 @@ public protocol SpitfireDelegate: class {
 }
 
 public class Spitfire {
-    weak var delegate: SpitfireDelegate?
-    
-    public init(delegate: SpitfireDelegate) {
-        self.delegate = delegate
-    }
+    private weak var delegate: SpitfireDelegate?
     
     private var videoWriter: AVAssetWriter?
     private var writer: Writer?
@@ -31,7 +27,18 @@ public class Spitfire {
         return documentURL.appendingPathComponent("output.mov")
     }
     
-
+    /// Creates a Spitfire object with the provided delegate
+    ///
+    /// - Parameter delegate: Delegate to handle status updates
+    public init(delegate: SpitfireDelegate) {
+        self.delegate = delegate
+    }
+    
+    /// Performs creation of video from provided images
+    ///
+    /// - Parameters:
+    ///   - images: [UIimage], all images must be the same size
+    ///   - fps: Framerate, default value is 30 & must be 1...60
     public func makeVideo(with images: [UIImage],
                           fps: Int32 = 30) {
         guard let size = images.first?.size else {

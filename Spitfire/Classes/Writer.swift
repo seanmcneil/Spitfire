@@ -14,6 +14,12 @@ final class Writer {
     
     private let writeQueue = DispatchQueue(label: "writequeue", qos: .background)
     
+    /// Initializes writer object with objects for handling video writing work
+    ///
+    /// - Parameters:
+    ///   - videoWriter: Service for writing to new file
+    ///   - pixelBufferAdaptor: Provides interface for appending samples to AVAssetWriterInput
+    ///   - videoWriterInput: Provides interface for appending samples to AVAssetWriter
     init(videoWriter: AVAssetWriter,
          pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor,
          videoWriterInput: AVAssetWriterInput) {
@@ -22,6 +28,12 @@ final class Writer {
         self.videoWriterInput = videoWriterInput
     }
     
+    /// Starts process of writing frames to file
+    ///
+    /// - Parameters:
+    ///   - images: [UIImage] for creating video
+    ///   - videoData: Contains information for configuring video
+    ///   - delegate: Delegate to handle status updates
     func write(images: [UIImage],
                videoData: VideoData,
                delegate: SpitfireDelegate?) {
@@ -36,6 +48,12 @@ final class Writer {
         })
     }
     
+    /// Handles writing of frames to video file
+    ///
+    /// - Parameters:
+    ///   - images: [UIImage] for creating video
+    ///   - videoData: Contains information for configuring video
+    ///   - delegate: Delegate to handle status updates
     private func writeFrames(images: [UIImage],
                              videoData: VideoData,
                              delegate: SpitfireDelegate?) {
@@ -74,7 +92,14 @@ final class Writer {
         }
     }
     
-    // Set up pixel buffer to add a frame at specified time
+    /// Set up pixel buffer to add a frame at specified time
+    ///
+    /// - Parameters:
+    ///   - adaptor: Provides interface for appending samples to AVAssetWriterInput
+    ///   - image: UIImage to write, passed in by reference
+    ///   - presentationTime: Time value for marking position in video
+    ///   - delegate: Delegate to handle status updates
+    /// - Returns: Bool that indicates if operation was successful
     private func append(pixelBufferAdaptor adaptor: AVAssetWriterInputPixelBufferAdaptor,
                 with image: inout UIImage,
                 at presentationTime: CMTime,
@@ -82,7 +107,7 @@ final class Writer {
         if let pixelBufferPool = adaptor.pixelBufferPool {
             let pixelBufferPointer = UnsafeMutablePointer<CVPixelBuffer?>.allocate(capacity: 1)
             let status = CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pixelBufferPool, pixelBufferPointer)
-            guard let pixelBuffer = pixelBufferPointer.pointee else {
+            guard var pixelBuffer = pixelBufferPointer.pointee else {
                 delegate?.videoFailed(error: .pixelBufferPointeeFailure)
                 
                 return false
@@ -94,7 +119,7 @@ final class Writer {
                 return false
             }
             
-            fill(pixelBuffer: pixelBuffer, with: image)
+            fill(pixelBuffer: &pixelBuffer, with: &image)
             if adaptor.append(pixelBuffer, withPresentationTime: presentationTime) {
                 pixelBufferPointer.deinitialize(count: 1)
                 pixelBufferPointer.deallocate()
@@ -107,9 +132,13 @@ final class Writer {
         return false
     }
     
-    // Populates the pixel buffer with the contents of the current image
-    private func fill(pixelBuffer buffer: CVPixelBuffer,
-                      with image: UIImage) {
+    /// Populates the pixel buffer with the contents of the current image
+    ///
+    /// - Parameters:
+    ///   - buffer: Memory storage for pixel buffer, passed in by reference
+    ///   - image: UIImage to write, passed in by reference
+    private func fill(pixelBuffer buffer: inout CVPixelBuffer,
+                      with image: inout UIImage) {
         CVPixelBufferLockBaseAddress(buffer, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
         
         guard let context = CGContext(
