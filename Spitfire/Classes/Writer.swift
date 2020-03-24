@@ -101,9 +101,9 @@ final class Writer {
     ///   - delegate: Delegate to handle status updates
     /// - Returns: Bool that indicates if operation was successful
     private func append(pixelBufferAdaptor adaptor: AVAssetWriterInputPixelBufferAdaptor,
-                with image: inout UIImage,
-                at presentationTime: CMTime,
-                delegate: SpitfireDelegate?) -> Bool {
+                        with image: inout UIImage,
+                        at presentationTime: CMTime,
+                        delegate: SpitfireDelegate?) -> Bool {
         if let pixelBufferPool = adaptor.pixelBufferPool {
             let pixelBufferPointer = UnsafeMutablePointer<CVPixelBuffer?>.allocate(capacity: 1)
             let status = CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pixelBufferPool, pixelBufferPointer)
@@ -153,8 +153,32 @@ final class Writer {
                 return
         }
         
-        let rect = CGRect(origin: .zero, size: image.size)
-        context.draw(cgImage, in: rect)
+        var transform: CGAffineTransform = CGAffineTransform.identity
+        
+        switch image.imageOrientation {
+        case .down, .downMirrored:
+            transform = transform.translatedBy(x: image.size.width, y: image.size.height)
+            transform = transform.rotated(by: CGFloat.pi)
+        case .left, .leftMirrored:
+            transform = transform.translatedBy(x: image.size.width, y: 0)
+            transform = transform.rotated(by: CGFloat.pi / 2.0)
+        case .right, .rightMirrored:
+            transform = transform.translatedBy(x: 0, y: image.size.height)
+            transform = transform.rotated(by: CGFloat.pi / -2.0)
+        case .up, .upMirrored:
+            break
+        @unknown default:
+            break
+        }
+        
+        context.concatenate(transform)
+        
+        switch image.imageOrientation {
+        case .left, .leftMirrored, .right, .rightMirrored:
+            context.draw(cgImage, in: CGRect(x: 0, y: 0, width: image.size.height, height: image.size.width))
+        default:
+            context.draw(cgImage, in: CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
+        }
         
         CVPixelBufferUnlockBaseAddress(buffer, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
     }
