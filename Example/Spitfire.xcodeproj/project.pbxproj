@@ -42,7 +42,7 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* SpitefireTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpitefireTests.swift; sourceTree = "<group>"; };
 		62E9C456A966F9C9E1D4FB6A /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		97EAA03D617493498B045ECC /* Spitfire.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Spitfire.podspec; path = ../Spitfire.podspec; sourceTree = "<group>"; };
+		97EAA03D617493498B045ECC /* Spitfire.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Spitfire.podspec; path = ../Spitfire.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9BD611417C2930145E10C60B /* Pods-Spitfire_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Spitfire_Tests.debug.xcconfig"; path = "Target Support Files/Pods-Spitfire_Tests/Pods-Spitfire_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		A30F7FD94C4036C1D9C8DA35 /* Pods_Spitfire_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Spitfire_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F792B819C94DEC987F46C5E2 /* Pods_Spitfire_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Spitfire_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -488,6 +488,7 @@
 				INFOPLIST_FILE = Spitfire/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 2.1;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -504,6 +505,7 @@
 				INFOPLIST_FILE = Spitfire/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 2.1;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
