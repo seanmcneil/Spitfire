@@ -65,8 +65,8 @@ final class Writer {
             // Will continue to loop until the video writer is able to write, which effectively handles buffer backups
             if videoWriterInput.isReadyForMoreMediaData {
                 assert(!Thread.isMainThread)
-                let lastFrameTime = CMTimeMake(value: frameCount, timescale: videoData.fps)
-                let presentationTime = frameCount == 0 ? lastFrameTime : CMTimeAdd(lastFrameTime, frameDuration)
+                let lastFrameTime = CMTimeMake(value: frameCount - 1, timescale: videoData.fps)
+                let presentationTime = CMTimeAdd(lastFrameTime, frameDuration)
                 var image = images[Int(frameCount)]
                 
                 guard image.size == videoData.size else {
